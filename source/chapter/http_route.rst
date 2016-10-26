@@ -168,78 +168,102 @@ GET   /                     controllers.Application.homePage()
 *********
 
 有时候需要指定参数的值：
-```
-# Extract the page parameter from the path, or fix the value for /
-GET   /                     controllers.Application.show(page = "home")
-GET   /:page                controllers.Application.show(page)
-```
 
-#### 设置参数默认值
+.. code-block:: scala
+  # Extract the page parameter from the path, or fix the value for /
+  GET   /                     controllers.Application.show(page = "home")
+  GET   /:page                controllers.Application.show(page)
+
+
+*************
+设置参数默认值
+*************
+
 有时候还需要设置参数默认值：
-```
-# Pagination links, like /clients?page=3
-GET   /clients              controllers.Clients.list(page: Int ?= 1)
-```
 
-#### 可选参数
+.. code-block:: scala
+
+  # Pagination links, like /clients?page=3
+  GET   /clients              controllers.Clients.list(page: Int ?= 1)
+
+
+*******
+可选参数
+*******
+
 还可以设置可选参数：
-```
-# The version parameter is optional. E.g. /api/list-all?version=3.0
-GET   /api/list-all         controllers.Api.list(version: Option[String])
-```
+
+.. code-block:: scala
+  
+  # The version parameter is optional. E.g. /api/list-all?version=3.0
+  GET   /api/list-all         controllers.Api.list(version: Option[String])
 
 
-### 路由权重
+
+路由权重
+-------
 
 优先匹配首先定义的规则
 
-### 反向路由
-也可以通过调用的方法反向生成URL，对于路由规则中的controller，play会在routes目录中生成一个反向控制器，返回play.api.mvc.Call 。
+反向路由
+-------
 
-play.api.mvc.Call 定义了一个HTTP调用，它提供了请求方法和URI。
+也可以通过调用的方法反向生成URL，对于路由规则中的 ``controller`` ，play会在routes目录中生成一个反向控制器，返回 ``play.api.mvc.Call`` 。
+
+``play.api.mvc.Call`` 定义了一个HTTP调用，它提供了请求方法和URI。
 
 例如：
-```
-package controllers
 
-import play.api._
-import play.api.mvc._
+.. code-block:: scala
 
-class Application extends Controller {
+  package controllers
 
-  def hello(name: String) = Action {
-    Ok("Hello " + name + "!")
+  import play.api._
+  import play.api.mvc._
+
+  class Application extends Controller {
+
+    def hello(name: String) = Action {
+      Ok("Hello " + name + "!")
+    }
+
   }
 
-}
-```
 映射到路由表：
-```
-# Hello action
-GET   /hello/:name          controllers.Application.hello(name)
-```
-可以反向获取hello方法的URL：
-```
-// Redirect to /hello/Bob
-def helloBob = Action {
-  Redirect(routes.Application.hello("Bob"))
-}
-```
+
+.. code-block:: scala
+
+  # Hello action
+  GET   /hello/:name          controllers.Application.hello(name)
+
+可以反向获取 ``hello`` 方法的URL：
+
+.. code-block:: scala
+  
+  // Redirect to /hello/Bob
+  def helloBob = Action {
+    Redirect(routes.Application.hello("Bob"))
+  }
 
 
-### 默认路由
+
+默认路由
+-------
 
 Play提供了一些默认的路由：
-```
-# Redirects to https://www.playframework.com/ with 303 See Other
-GET   /about      controllers.Default.redirect(to = "https://www.playframework.com/")
 
-# Responds with 404 Not Found
-GET   /orders     controllers.Default.notFound
+.. code-block:: scala
 
-# Responds with 500 Internal Server Error
-GET   /clients    controllers.Default.error
+  # Redirects to https://www.playframework.com/ with 303 See Other
+  GET   /about      controllers.Default.redirect(to = "https://www.playframework.com/")
 
-# Responds with 501 Not Implemented
-GET   /posts      controllers.Default.todo
-```
+  # Responds with 404 Not Found
+  GET   /orders     controllers.Default.notFound
+
+  # Responds with 500 Internal Server Error
+  GET   /clients    controllers.Default.error
+
+  # Responds with 501 Not Implemented
+  GET   /posts      controllers.Default.todo
+
+
