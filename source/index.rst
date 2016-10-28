@@ -7,12 +7,12 @@ Play Framework 参考手册
 .. toctree::
    :maxdepth: 2
 
-   /chapter/action_controller_result.rst
-   /chapter/http_routing.rst
-   /chpater/manipulating_result.rst
-   /chapter/session_and_flash.rst
-   /chapter/body_passer.rst
-   /chapter/action_composition.rst
-   /chapter/content_negotiation.rst
-   /chapter/handling_errors.rst
+   /chapter/action_controller_result
+   /chapter/http_routing
+   /chapter/manipulating_results
+   /chapter/session_and_flash
+   /chapter/body_passer
+   /chapter/action_composition
+   /chapter/content_negotiation
+   /chapter/handling_errors
  
