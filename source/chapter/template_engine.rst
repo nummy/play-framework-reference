@@ -15,7 +15,7 @@ Play框架的模板使用的是Twirl，它使基于scala实现的，它具有以
 - 可以在任意编辑器中进行编辑
 
 所有模板文件都必须编译之后才能运行，所以可以在浏览器中查看错误信息。
-![link](https://www.playframework.com/documentation/2.5.x/resources/manual/working/scalaGuide/main/templates/images/templatesError.png)
+
 
 .. toctree::
    :maxdepth: 1
