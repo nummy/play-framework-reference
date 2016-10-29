@@ -271,3 +271,89 @@ JSON库可以将隐式参数 ``Reads[T]`` 映射成相应的类：
     response.xml \ "message"
   }
 
+处理大响应数据
+++++++++++++++
+当调用 ``get()`` 、 ``post()`` 或者 ``execute()`` 方法的时候，响应数据会加载到内存中，如果数据比较大会容易导致内存错误。
+
+``WS`` 库允许我们逐步的读取响应数据，通过使用Akka的 ``Sink``。
+
+``WSRequest``的 ``stream()`` 方法返回 ``Future[StreamedResponse]``， 而 ``StreamResponse`` 是一个保存响应头部和响应体的容器。
+
+.. code-block:: scala
+
+  // Make the request
+  val futureResponse: Future[StreamedResponse] =
+    ws.url(url).withMethod("GET").stream()
+
+  val bytesReturned: Future[Long] = futureResponse.flatMap {
+    res =>
+     // Count the number of bytes returned
+     res.body.runWith(Sink.fold[Long, ByteString](0L){ (total, bytes) =>
+        total + bytes.length
+      })
+  }
+  
+也可以将响应数据保存在文件中：
+
+.. code-block:: scala
+    
+    // Make the request
+    val futureResponse: Future[StreamedResponse] =
+      ws.url(url).withMethod("GET").stream()
+
+    val downloadedFile: Future[File] = futureResponse.flatMap {
+      res =>
+       val outputStream = new FileOutputStream(file)
+
+       // The sink that writes to the output stream
+       val sink = Sink.foreach[ByteString] { bytes =>
+          outputStream.write(bytes.toArray)
+        }
+
+        // materialize and run the stream
+       res.body.runWith(sink).andThen {
+          case result =>
+           // Close the output stream whether there was an error or not
+           outputStream.close()
+           // Get the result or rethrow the error
+           result.get
+       }.map(_ => file)
+    }
+
+还有就是将响应数据返回给Action：
+
+.. code-block:: scala
+  
+  def downloadFile = Action.async {
+
+  // Make the request
+  ws.url(url).withMethod("GET").stream().map {
+    case StreamedResponse(response, body) =>
+
+      // Check that the response was successful
+      if (response.status == 200) {
+
+        // Get the content type
+        val contentType = response.headers.get("Content-Type").flatMap(_.headOption)
+          .getOrElse("application/octet-stream")
+
+        // If there's a content length, send that, otherwise return the body chunked
+        response.headers.get("Content-Length") match {
+          case Some(Seq(length)) =>
+            Ok.sendEntity(HttpEntity.Streamed(body, Some(length.toLong), Some(contentType)))
+          case _ =>
+            Ok.chunked(body).as(contentType)
+        }
+      } else {
+        BadGateway
+      }
+   }
+  }
+
+从上面我们可以注意到可以通过 ``withMethod`` 指定请求方法:
+
+.. code-block:: scala
+  
+  val futureResponse: Future[StreamedResponse] =
+    ws.url(url).withMethod("PUT").withBody("some body").stream()
+ 
