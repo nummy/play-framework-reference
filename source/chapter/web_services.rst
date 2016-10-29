@@ -205,6 +205,33 @@ WS提供了一个过滤器的实现，位于 ``play.api.libs.ws.ahc.AhcCurlReque
   curl \
   --verbose \
   --request PUT \
-   --header 'Content-Type: application/x-www-form-urlencoded; charset=utf-8' \
-   --data 'key=value' \
-   'http://localhost:19001/
+  --header 'Content-Type: application/x-www-form-urlencoded; charset=utf-8' \
+  --data 'key=value' \
+  'http://localhost:19001/
+
+
+处理响应结果
+------------
+
+响应结果包裹在 ``Future`` 中。
+
+当 ``Future`` 中的计算任务完成是，需要指定一个隐式参数--执行上下文， ``Future``的回调将在该上线文的线程池中执行。我们可以通过依赖注入指定执行上下文
+
+.. code-block:: scala
+
+  class PersonService @Inject()(implicit context: ExecutionContext) {
+    // ...
+  }
+
+如果不适用依赖注入，也可以使用默认的执行上下文：
+
+.. code-block:: scala
+  
+  implicit val context = play.api.libs.concurrent.Execution.Implicits.defaultContext
+
+下面的例子使用都使用如下定义的样式类进行序列化和反序列化：
+
+.. code-block:: scala
+
+  case class Person(name: String, age: Int)
+
