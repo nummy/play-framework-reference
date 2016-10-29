@@ -113,3 +113,98 @@ HTTP头部信息可以通过一系列的键值对元组来指明：
 .. code-block:: scala
 
   ws.url(url).withVirtualHost("192.168.1.1").get()
+  
+设置超时时间
+++++++++++++
+
+如果需要指定请求的超时时间，可以使用 ``withRequestTimeout``来设置， 如果要一直等待下去，可以使用 ``Duration.Inf`` 作为参数。
+
+.. code-block:: scala
+  
+  ws.url(url).withRequestTimeout(5000.millis).get()
+  
+提交表单数据
++++++++++++++
+将表单数据以 ``Map[String, Seq[String]]]`` 的形式作为参数传递给 ``post`` 方法：
+
+.. code-block:: scala
+  
+  ws.url(url).post(Map("key" -> Seq("value")))
+  
+提交multipart/form数据
+++++++++++++++++++++++
+
+如果是提交 ``multipart-form-encoded`` 数据，则需要将 ``Source[play.api.mvc.MultipartFormData.Part[Source[ByteString, Any]], Any]``类型的数据作为参数传递给 ``post`` 方法：
+
+.. code-block:: scala
+  
+  ws.url(url).post(Source.single(DataPart("key", "value")))
+
+如果是上传文件，则需要将 ``play.api.mvc.MultipartFormData.FilePart[Source[ByteString, Any]]`` 类型的数据传递给 ``post`` 方法:
+
+.. code-block:: scala
+
+  ws.url(url).post(Source(FilePart("hello", "hello.txt", Option("text/plain"), FileIO.fromFile(tmpFile)) :: DataPart("key", "value") :: List()))
+
+
+提交JSON数据
+++++++++++++
+
+使用JSON库即可：
+
+.. code-block:: 
+
+  import play.api.libs.json._
+  val data = Json.obj(
+    "key1" -> "value1",
+    "key2" -> "value2"
+  )
+  val futureResponse: Future[WSResponse] = ws.url(url).post(data)
+
+提交XML数据
++++++++++++
+
+提交XML数据最简单的方式就是使用XML字面量，XML字面量虽然方便，但是并不快，为了方便起见，可以使用XML视图模板或者JAXB库。
+
+.. code-block:: scala
+  
+  val data = <person>
+    <name>Steve</name>
+    <age>23</age>
+  </person>
+  val futureResponse: Future[WSResponse] = ws.url(url).post(data)
+
+流数据
++++++++
+
+WS还支持流数据，用于上传大型文件，如果数据库支持Reactive Streams，则可以使用流数据：
+
+.. code-block:: scala
+  
+  val wsResponse: Future[WSResponse] = ws.url(url)
+    .withBody(StreamedBody(largeImageFromDB)).execute("PUT")
+  
+上面l ``largeImageFormDB`` 的数据类型为 ``Source[ByteString, _]``。
+
+过滤请求
+++++++++
+
+还可以给WSRequest添加一个请求过滤器，请求过滤器通过继承特质 `` play.api.libs.ws.WSRequestFilter`` 来实现，然后使用 ``request.withRequestFilter(filter)`` 将它添加请求中.
+
+WS提供了一个过滤器的实现，位于 ``play.api.libs.ws.ahc.AhcCurlRequestLogger`` ，它用于将请求的信息以SLF4J日志形式进行记录。
+
+.. code-block:: scala
+
+  ws.url(s"http://localhost:$testServerPort")
+  .withRequestFilter(AhcCurlRequestLogger())
+  .withBody(Map("param1" -> Seq("value1")))
+  .put(Map("key" -> Seq("value")))  
+  
+将输入以下日志::
+  
+  curl \
+  --verbose \
+  --request PUT \
+   --header 'Content-Type: application/x-www-form-urlencoded; charset=utf-8' \
+   --data 'key=value' \
+   'http://localhost:19001/
