@@ -7,7 +7,7 @@
 
 - ``Flash`` 中数据只会保存到下一次请求
 
-由于Play中 ``session``或 ``flash`` 的数据都只是保存在接下来的请求中，而不是服务器中，所以对保存的数据大小有限制，最大为4kb。默认的``cookie``名为
+由于Play中 ``session`` 或 ``flash`` 的数据都只是保存在接下来的请求中，而不是服务器中，所以对保存的数据大小有限制，最大为4kb。默认的``cookie``名为
 ``PLAY_SESSION``，可以编辑配置的 ``session.cookieName`` 进行修改。
 
 在session中保存数据
