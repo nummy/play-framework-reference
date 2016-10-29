@@ -61,3 +61,55 @@
   val futureResponse: Future[WSResponse] = complexRequest.get()
  
 请求结果以 ``Future[WSResponse]`` 形式返回， ``WSResponse`` 包含了服务端返回的数据。
+
+带认证的请求
+++++++++++++
+
+如果需要HTTP认证，可以在请求中指明认证方式以及相关参数，WS支持的认证模式包括以下几种：
+
+- BASIC
+
+- DIGEST
+
+- KERBEROS
+
+- NTLM
+
+- SPNEGO
+
+.. code-block:: scala
+  
+  ws.url(url).withAuth(user, password, WSAuthScheme.BASIC).get()
+
+带重定向的请求
++++++++++++++
+
+如果请求结果导致了320或者301重定向，可以自动重定向，而不是再发送一次请求：
+
+.. code-block:: scala
+  
+  ws.url(url).withFollowRedirects(true).get()
+  
+带头部信息的请求
+++++++++++++++++
+
+HTTP头部信息可以通过一系列的键值对元组来指明：
+
+.. code-block:: scala
+  
+  ws.url(url).withHeaders("headerKey" -> "headerValue").get()
+ 
+例如，通过设置 ``Content-Type`` 来指定请求中发送的数据类型：
+
+.. code-block:: scala
+  
+  ws.url(url).withHeaders("Content-Type" -> "application/xml").post(xmlString)
+  
+带虚拟主机的请求
++++++++++++++++
+
+可以在请求中指明虚拟主机：
+
+.. code-block:: scala
+
+  ws.url(url).withVirtualHost("192.168.1.1").get()
