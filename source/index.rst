@@ -27,7 +27,7 @@ Play Framework 参考手册
    /chapter/akka
    /chapter/internationlization
    /chapter/dependency_injection
-   /chapter/settings/
+   /chapter/settings
    /chapter/test
    /chapter/logging
    
