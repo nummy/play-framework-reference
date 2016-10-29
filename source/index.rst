@@ -16,3 +16,18 @@ Play Framework 参考手册
    /chapter/content_negotiation
    /chapter/handling_errors
    /chapter/asynchronous_http
+   /chapter/template_engine
+   /chapter/form
+   /chapter/json
+   /chapter/xml
+   /chapter/upload
+   /chapter/database
+   /chapter/cache
+   /chapter/web_services
+   /chapter/akka
+   /chapter/internationlization
+   /chapter/dependency_injection
+   /chapter/settings/
+   /chapter/test
+   /chapter/logging
+   
