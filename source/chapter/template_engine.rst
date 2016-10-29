@@ -18,3 +18,5 @@ Play框架的模板使用的是Twirl，它使基于scala实现的，它具有以
    :maxdepth: 1
 
    ./templates/syntax
+   ./templates/usage
+   ./templates/custom
