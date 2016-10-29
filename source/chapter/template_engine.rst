@@ -2,6 +2,6 @@
 =============
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
-   /templates/syntax.rst
+   /templates/syntax
