@@ -235,3 +235,39 @@ WS提供了一个过滤器的实现，位于 ``play.api.libs.ws.ahc.AhcCurlReque
 
   case class Person(name: String, age: Int)
 
+将响应解析为JSON
+++++++++++++++++
+
+调用 ``response.json`` 将响应数据解析为 ``JSON`` 对象。
+
+.. code-block:: scala
+  
+  val futureResult: Future[String] = ws.url(url).get().map {
+   response =>
+      (response.json \ "person" \ "name").as[String]
+  }
+  
+JSON库可以将隐式参数 ``Reads[T]`` 映射成相应的类：
+
+.. code-block:: scala
+  
+  import play.api.libs.json._
+
+  implicit val personReads = Json.reads[Person]
+
+  val futureResult: Future[JsResult[Person]] = ws.url(url).get().map {
+    response => (response.json \ "person").validate[Person]
+  }
+  
+将响应解析为XML
++++++++++++++++
+
+使用 ``response.xml`` 将数据解析为XML：
+
+.. code-block:: scala
+
+  val futureResult: Future[scala.xml.NodeSeq] = ws.url(url).get().map {
+  response =>
+    response.xml \ "message"
+  }
+
