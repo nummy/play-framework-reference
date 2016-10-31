@@ -4,7 +4,7 @@
 内置HTTP路由
 -----------
 
-路由用于将HTTP请求导向Action。
+路由用于将HTTP请求导向 ``Action`` 。
 
 HTTP请求被MVC视为事件处理，事件包括两部分信息：
 
@@ -33,7 +33,7 @@ Play支持生成两种类型的路由：
 路由文件格式
 -----------
 
-``conf/routes`` 中定义了应用所有的路由规则，每个路由包括了请求方法和URL规则，它们与Action的调用相关联。
+``conf/routes`` 中定义了应用所有的路由规则，每个路由包括了请求方法和URL规则，它们与 ``Action`` 的调用相关联。
 
 例如，如下路由规则：
 
@@ -41,7 +41,7 @@ Play支持生成两种类型的路由：
   
   GET   /clients/:id          controllers.Clients.show(id: Long)
 
-每个路由规则都以请求方法开始，然后是URL规则，最后是Action调用的定义。
+每个路由规则都以请求方法开始，然后是URL规则，最后是 ``Action`` 调用的定义。
 
 也可以在文件中添加注释，以 ``#`` 开头：
 
@@ -61,7 +61,7 @@ Play支持生成两种类型的路由：
 HTTP方法
 --------
 
-Play支持的HTTP方法包括GET,POST,PUT, DELETE, HEAD。
+Play支持的HTTP方法包括 ``GET`` , ``POST`` , ``PUT`` ,  ``DELETE`` ,  ``HEAD`` 。
 
 URL规则
 -------
@@ -113,7 +113,7 @@ Play还支持自定义URL规则，使用 ``$id<regex>`` 语法：
 调用Action生成器方法
 -------------------
 
-路由定义的最后一部分就是调用Action生成方法，这部分必须定义一个合法的方法，该方法返回一个Action类型的值。
+路由定义的最后一部分就是调用 ``Action``生成方法，这部分必须定义一个合法的方法，该方法返回一个 ``Action`` 类型的值。
 
 如果方法没有定义任何参数：
 
@@ -208,7 +208,7 @@ GET   /                     controllers.Application.homePage()
 反向路由
 -------
 
-也可以通过调用的方法反向生成URL，对于路由规则中的 ``controller`` ，play会在routes目录中生成一个反向控制器，返回 ``play.api.mvc.Call`` 。
+也可以通过调用的方法反向生成URL，对于路由规则中的 ``controller`` ，play会在 ``routes`` 目录中生成一个反向控制器，返回 ``play.api.mvc.Call`` 。
 
 ``play.api.mvc.Call`` 定义了一个HTTP调用，它提供了请求方法和URI。
 
