@@ -119,7 +119,7 @@ Play还支持自定义URL规则，使用 ``$id<regex>`` 语法：
 
 .. code-block::
 
-GET   /                     controllers.Application.homePage()
+  GET   /                     controllers.Application.homePage()
 
 如果方法定义了参数，则参数值将从请求URI或者请求字符串中获取：
 
@@ -170,6 +170,7 @@ GET   /                     controllers.Application.homePage()
 有时候需要指定参数的值：
 
 .. code-block:: scala
+
   # Extract the page parameter from the path, or fix the value for /
   GET   /                     controllers.Application.show(page = "home")
   GET   /:page                controllers.Application.show(page)
